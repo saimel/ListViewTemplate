@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:ListViewTemplate"
+             mc:Ignorable="d"
+             x:Class="ListViewTemplate.MainPage"
+             Title="My Contacts"
+             Padding="0"
+             x:Name="_self">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+
+            <DataTemplate x:Key="EvenIndexDataTemplate">
+                <ViewCell>
+                    <Grid RowSpacing="4" ColumnSpacing="12" BackgroundColor="AliceBlue" Padding="10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="28" />
+                            <RowDefinition Height="28" />
+                        </Grid.RowDefinitions>
+
+                        <Label Text="{Binding Name}" FontSize="22" VerticalTextAlignment="Center"
+                               FontAttributes="Bold" Grid.Row="0" />
+
+                        <Label VerticalTextAlignment="Center"  LineBreakMode="TailTruncation" Grid.Row="1">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="City:" FontSize="10" />
+                                    <Span Text="{Binding City, StringFormat=' {0}'}" FontSize="14" />
+                                    <Span Text="  Company:" FontSize="10" />
+                                    <Span Text="{Binding Company, StringFormat=' {0}'}" FontSize="14" />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+
+                        <Button Text="Delete" BackgroundColor="#FFE2CF" TextColor="Navy" FontSize="14"
+                                Command="{Binding RemoveContactCommand, Source={x:Reference _self}}"
+                                CommandParameter="{Binding .}" Padding="8,0" Grid.Column="1" />
+                    </Grid>
+                </ViewCell>
+            </DataTemplate>
+
+            <DataTemplate x:Key="OddIndexDataTemplate">
+                <ViewCell>
+                    <Grid RowSpacing="4" ColumnSpacing="12" BackgroundColor="White" Padding="10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="28" />
+                            <RowDefinition Height="28" />
+                        </Grid.RowDefinitions>
+
+                        <Label Text="{Binding Name}" FontSize="22" VerticalTextAlignment="Center"
+                               FontAttributes="Bold" Grid.Row="0" />
+
+                        <Label VerticalTextAlignment="Center"  LineBreakMode="TailTruncation" Grid.Row="1" Grid.ColumnSpan="2">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="City:" FontSize="10" />
+                                    <Span Text="{Binding City, StringFormat=' {0}'}" FontSize="14" />
+                                    <Span Text="Company:" FontSize="10" />
+                                    <Span Text="{Binding Company, StringFormat=' {0}'}" FontSize="14" />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+
+                        <Button Text="Delete" BackgroundColor="#FFE2CF" TextColor="Navy" FontSize="14"
+                                Command="{Binding RemoveContactCommand, Source={x:Reference _self}}"
+                                CommandParameter="{Binding .}" Padding="8,0" Grid.Column="1" />
+                    </Grid>
+                </ViewCell>
+            </DataTemplate>
+
+            <local:EvenOddTemplateSelector x:Key="MyDataTemplate"
+                                           EvenTemplate="{StaticResource EvenIndexDataTemplate}"
+                                           OddTemplate="{StaticResource OddIndexDataTemplate}" />
+
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.Content>
+
+        <Grid>
+
+            <ListView ItemsSource="{Binding MyContacts}"
+                      ItemTemplate="{StaticResource MyDataTemplate}"
+                      IsPullToRefreshEnabled="False"
+                      SeparatorVisibility="None" 
+                      HasUnevenRows="True" />
+
+        </Grid>
+
+    </ContentPage.Content>
+
+</ContentPage>
