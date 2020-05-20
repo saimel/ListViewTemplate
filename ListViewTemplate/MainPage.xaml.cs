@@ -14,12 +14,17 @@ namespace ListViewTemplate
     [DesignTimeVisible(false)]
     public partial class MainPage : ContentPage
     {
-        public ICommand RemoveContactCommand { get; set; }
+        private IList<ContactModel> contacts;
 
-        public ObservableCollection<ContactModel> MyContacts { get; set; }
+        public ICommand AddCommand { get; private set; }
+
+        public ICommand RemoveContactCommand { get; private set; }
+
+        public ObservableCollection<ContactModel> MyContacts { get; private set; }
 
         public MainPage()
         {
+            AddCommand = new Command(() => AddContact());
             RemoveContactCommand = new Command<ContactModel>(async (ct) => await RemoveContactAsync(ct));
             MyContacts = new ObservableCollection<ContactModel>();
             Populate();
@@ -29,13 +34,20 @@ namespace ListViewTemplate
             BindingContext = this;
         }
 
+        private void AddContact()
+        {
+            MyContacts.Add(contacts[0]);
+            contacts.RemoveAt(0);
+        }
+
         private async Task RemoveContactAsync(ContactModel ct)
         {
-            bool response = await DisplayAlert("Remove Contact", string.Format("Do you want to remove '{0}'?", ct.Name), "Yes", "No");
-            if(response == true)
-            {
-                MyContacts.Remove(ct);
-            }
+            //bool response = await DisplayAlert("Remove Contact", string.Format("Do you want to remove '{0}'?", ct.Name), "Yes", "No");
+            //if (response == true)
+            //{
+            MyContacts.Remove(ct);
+            //}
+            await Task.Delay(50);
         }
 
         private void Populate()
@@ -144,9 +156,11 @@ namespace ListViewTemplate
                 new ContactModel { Name = "Elaina Scay", City = "Taurisma", Company = "Kreiger, Marks and Funk" }
             };
 
-            foreach (var ct in tmp.OrderBy(c => c.Name))
+            contacts = new List<ContactModel>(tmp.OrderBy(c => c.Name));
+
+            for (int i = 0; i < 5; i++)
             {
-                MyContacts.Add(ct);
+                AddContact();
             }
         }
     }

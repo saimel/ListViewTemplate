@@ -6,8 +6,6 @@
 //
 //
 
-using System;
-
 namespace ListViewTemplate
 {
     public class ContactModel
